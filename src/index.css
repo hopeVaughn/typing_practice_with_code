@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes caret-blink {
+
+  0%,
+  100% {
+    border-color: black;
+  }
+
+  50% {
+    border-color: transparent;
+  }
+}
+
+.caret-blink {
+  animation: caret-blink 1s infinite;
+}
