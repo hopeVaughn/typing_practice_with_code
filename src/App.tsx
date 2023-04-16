@@ -3,52 +3,95 @@ import TypingThroughInput from './components/TypingThroughInput';
 import 'tailwindcss/tailwind.css';
 
 const App = () => {
-  const code = `import React, { useState } from 'react';
+  const code = `  class TreeNode {
+  value: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
 
-const AddItemList: React.FC = () => {
-const [items, setItems] = useState<string[]>([]);
-const [text, setText] = useState('');
+  constructor(value: number, left: TreeNode | null = null, right: TreeNode | null = null) {
+    this.value = value;
+    this.left = left;
+    this.right = right;
+  }
+}
 
-const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setText(e.target.value);
-};
+class BinaryTree {
+  root: TreeNode | null;
 
-const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-  setItems([...items, text]);
-  setText('');
-};
+  constructor(root: TreeNode | null = null) {
+    this.root = root;
+  }
 
-return (
-  <div className='w-full md:w-1/2 lg:w-1/3 mx-auto px-6 md:px-0'>
-    <form onSubmit={handleSubmit} className='flex flex-col space-y-4'>
-      <label className='text-gray-700 font-semibold'>
-        Add item:
-        <input
-          type='text'
-          value={text}
-          onChange={handleTextChange}
-          className='border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500'
-        />
-      </label>
-      <button
-        type='submit'
-        className='bg-blue-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-      >
-        Add
-      </button>
-    </form>
-    <ul className='mt-4'>
-      {items.map((item) => (
-        <li key={item} className='bg-gray-200 p-2 rounded-md my-2'>
-          {item}
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+  inOrder(): number[] {
+    const result: number[] = [];
 
-export default AddItemList;`;
+    const traverse = (node: TreeNode | null) => {
+      if (node === null) {
+        return;
+      }
+
+      traverse(node.left);
+      result.push(node.value);
+      traverse(node.right);
+    };
+
+    traverse(this.root);
+    return result;
+  }
+
+  preOrder(): number[] {
+    const result: number[] = [];
+
+    const traverse = (node: TreeNode | null) => {
+      if (node === null) {
+        return;
+      }
+
+      result.push(node.value);
+      traverse(node.left);
+      traverse(node.right);
+    };
+
+    traverse(this.root);
+    return result;
+  }
+
+  postOrder(): number[] {
+    const result: number[] = [];
+
+    const traverse = (node: TreeNode | null) => {
+      if (node === null) {
+        return;
+      }
+
+      traverse(node.left);
+      traverse(node.right);
+      result.push(node.value);
+    };
+
+    traverse(this.root);
+    return result;
+  }
+
+  static buildSampleTree(): BinaryTree {
+    const rootNode = new TreeNode(1);
+    rootNode.left = new TreeNode(2);
+    rootNode.right = new TreeNode(3);
+    rootNode.left.left = new TreeNode(4);
+    rootNode.left.right = new TreeNode(5);
+    rootNode.right.left = new TreeNode(6);
+    rootNode.right.right = new TreeNode(7);
+
+    return new BinaryTree(rootNode);
+  }
+}
+
+// Usage example
+const tree = BinaryTree.buildSampleTree();
+console.log(tree.inOrder()); // Output: [4, 2, 5, 1, 6, 3, 7]
+console.log(tree.preOrder()); // Output: [1, 2, 4, 5, 3, 6, 7]
+console.log(tree.postOrder()); // Output: [4, 5, 2, 6, 7, 3, 1]
+`;
 
   return (
     <div className='container mx-auto flex flex-col p-4'>
